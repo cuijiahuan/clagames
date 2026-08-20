@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0b1020;
+  --foreground: #ededed;
+  --game-bg: #0b1020;
 }
 
 @theme inline {
@@ -12,15 +13,47 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  /* Stop the mobile browser from showing pull-to-refresh / overscroll bounce
+     when the user interacts with a game. */
+  overscroll-behavior: none;
+}
+
+/* Make sure the canvas never triggers text selection / callouts on long press. */
+canvas {
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+}
+
+/* On wide screens the portrait canvas sits in a letterboxed play area.
+   Give it a soft glow + rounded corners so it reads as a floating play
+   field against the ambient background. Mobile keeps it edge-to-edge. */
+@media (min-width: 640px) {
+  canvas {
+    border-radius: 12px;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 40px rgba(45, 212, 191, 0.08),
+      0 0 90px rgba(139, 92, 246, 0.06);
+  }
+}
+
+/* Respect users who prefer reduced motion (animations only; gameplay untouched). */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
